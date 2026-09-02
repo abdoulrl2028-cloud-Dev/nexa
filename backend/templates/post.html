@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  {% if not_indexable %}<p class="notice">Este conteúdo não está disponível publicamente.</p>{% endif %}
+
+  <div class="feed single">
+    {% set p = post %}
+    {% include "_postcard.html" %}
+  </div>
+
+  <section class="section">
+    <h2 class="section-title">Comentários</h2>
+    <div class="comments" id="comments">
+      {% for c in comments %}
+        <div class="comment"><strong>{{ c.author }}</strong><span class="muted">{{ c.created_at | pretty }}</span><p>{{ c.content }}</p></div>
+      {% else %}
+        <p class="muted">Seja o primeiro a comentar.</p>
+      {% endfor %}
+    </div>
+    {% if current_user %}
+      <form class="composer" id="comment-form" data-slug="{{ post.slug }}">
+        <input name="content" placeholder="Escreva um comentário..." maxlength="2000" required>
+        <button class="btn btn-primary" type="submit">Comentar</button>
+      </form>
+    {% endif %}
+  </section>
+</main>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

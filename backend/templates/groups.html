@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  <section class="section">
+    <div class="section-head">
+      <h1>Grupos</h1>
+      {% if current_user %}<a class="btn btn-primary" href="/app/create-group">Criar grupo</a>{% endif %}
+    </div>
+    <div class="grid-cards">
+      {% for g in groups %}
+        <a class="card" href="/groups/{{ g.slug }}">
+          {% if g.image %}<img src="{{ g.image }}" alt="" loading="lazy">{% endif %}
+          <div class="card-body">
+            <strong>{{ g.name }}</strong>
+            <span class="muted small">{{ g.member_count }} membros</span>
+            {% if g.description %}<p class="muted small">{{ g.description }}</p>{% endif %}
+          </div>
+        </a>
+      {% else %}
+        <p class="empty">Nenhum grupo público ainda.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page">
+  <div class="section-head">
+    <h1 class="section-title">Meu perfil</h1>
+    <a class="btn btn-ghost" href="/app/settings">Editar</a>
+  </div>
+  <div class="profile-hero">
+    <div class="profile-row">
+      <div class="avatar lg">
+        {% if me.avatar %}<img src="{{ me.avatar }}" alt="">{% else %}<span class="avatar-fallback">{{ me.display_name[:1] }}</span>{% endif %}
+      </div>
+      <div class="profile-info">
+        <h1>{{ me.display_name }}</h1>
+        <p class="muted">@{{ me.username }}{% if me.is_private %} · privado{% endif %}</p>
+        {% if me.bio %}<p class="bio">{{ me.bio }}</p>{% endif %}
+      </div>
+    </div>
+  </div>
+  <section class="feed">
+    {% for p in feed %}
+      {% include "_postcard.html" %}
+    {% else %}
+      <p class="empty">Você ainda não publicou. Crie seu primeiro post.</p>
+    {% endfor %}
+  </section>
+</div>
+{% endblock %}

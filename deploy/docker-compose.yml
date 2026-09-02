@@ -1,0 +1,56 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nexa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexa}
+      POSTGRES_DB: ${POSTGRES_DB:-nexa}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nexa}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NEXA_ENV: ${NEXA_ENV:-staging}
+      SITE_URL: ${SITE_URL:-http://localhost:8000}
+      WWW_HOST: ${WWW_HOST:-localhost}
+      API_HOST: ${API_HOST:-localhost}
+      SECRET_KEY: ${SECRET_KEY:?SECRET_KEY é obrigatória}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-nexa}:${POSTGRES_PASSWORD:-nexa}@db:5432/${POSTGRES_DB:-nexa}
+      REDIS_URL: redis://redis:6379/0
+      ALLOW_REGISTRATION: ${ALLOW_REGISTRATION:-true}
+    volumes:
+      - uploads:/srv/nexa/backend/data/uploads
+    ports:
+      - "${PORT:-8000}:8000"
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

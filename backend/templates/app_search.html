@@ -1,0 +1,11 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page">
+  <h1 class="section-title">Buscar no NEXA</h1>
+  <form class="search-form" id="search-form">
+    <input name="q" placeholder="Buscar pessoas, posts, grupos, círculos ou eventos..." autofocus>
+    <button class="btn btn-primary" type="submit">Buscar</button>
+  </form>
+  <div id="search-results" class="feed"></div>
+</div>
+{% endblock %}

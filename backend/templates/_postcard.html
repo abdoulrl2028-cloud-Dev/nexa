@@ -1,0 +1,33 @@
+<article class="post-card" data-slug="{{ p.slug }}">
+  <header class="post-head">
+    <a class="avatar" href="{{ p.author.url }}">
+      {% if p.author.avatar %}<img src="{{ p.author.avatar }}" alt="Foto de {{ p.author.display_name }}" loading="lazy">{% else %}<span class="avatar-fallback">{{ p.author.display_name[:1] }}</span>{% endif %}
+    </a>
+    <div class="post-meta">
+      <a class="author-name" href="{{ p.author.url }}">{{ p.author.display_name }}</a>{% if p.author.is_verified %}<span class="verified" title="Verificado">✓</span>{% endif %}
+      <a class="post-time" href="/post/{{ p.slug }}">{{ p.created_at | pretty }}</a>
+    </div>
+  </header>
+  {% if p.title %}<h3 class="post-title"><a href="/post/{{ p.slug }}">{{ p.title }}</a></h3>{% endif %}
+  {% if p.content %}<p class="post-content">{{ p.content }}</p>{% endif %}
+  {% if p.media %}
+    <div class="post-media">
+      {% for m in p.media %}
+        {% if m.kind == "image" %}
+          <img src="{{ m.url }}" alt="Mídia do post" loading="lazy">
+        {% elif m.kind == "video" %}
+          <video src="{{ m.url }}" controls preload="none"></video>
+        {% else %}
+          <a class="attachment" href="{{ m.url }}" target="_blank" rel="noopener">Anexo</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  <footer class="post-actions">
+    <button class="act like {% if p.liked %}on{% endif %}" data-act="like" data-slug="{{ p.slug }}" aria-label="Curtir">
+      <span class="ico">♥</span> <span class="cnt">{{ p.like_count }}</span>
+    </button>
+    <a class="act" href="/post/{{ p.slug }}"><span class="ico">💬</span> <span class="cnt">{{ p.comment_count }}</span></a>
+    <a class="act" href="/post/{{ p.slug }}"><span class="ico">↗</span></a>
+  </footer>
+</article>

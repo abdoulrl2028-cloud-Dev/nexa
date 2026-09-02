@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  <section class="section">
+    <h1>Explorar</h1>
+    <p class="muted">Conteúdo público de toda a comunidade NEXA.</p>
+    <div class="feed">
+      {% for p in feed %}
+        {% include "_postcard.html" %}
+      {% else %}
+        <p class="empty">Nada por aqui ainda.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

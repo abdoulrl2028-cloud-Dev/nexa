@@ -1,0 +1,34 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page narrow-page">
+  <h1 class="section-title">Criar evento</h1>
+  <form class="card form-card" data-act="create-event">
+    <label>Nome do evento
+      <input name="name" required maxlength="160" placeholder="ex.: Meetup NEXA">
+    </label>
+    <label>Descrição
+      <textarea name="description" rows="4" maxlength="10000"></textarea>
+    </label>
+    <label>Local
+      <input name="location" maxlength="255" placeholder="Online ou endereço">
+    </label>
+    <label>Data e hora de início
+      <input name="begins_at" type="datetime-local" required>
+    </label>
+    <label>Data e hora de fim (opcional)
+      <input name="ends_at" type="datetime-local">
+    </label>
+    <label>Visibilidade
+      <select name="visibility">
+        <option value="public">Público (indexável)</option>
+        <option value="private">Privado</option>
+      </select>
+    </label>
+    <span class="upload-status" data-upload-image></span>
+    <label class="btn-ghost file-btn">🖼️ Imagem <input type="file" name="image" accept="image/*" hidden></label>
+    <input type="hidden" name="image_key">
+    <button class="btn btn-primary" type="submit">Criar evento</button>
+  </form>
+  <p class="form-error" data-error></p>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/app"><span class="logo">N</span><span class="brand-name">NEXA</span></a>
+    {% set nav = [
+      ("Página inicial", "/app", "🏠"),
+      ("Explorar", "/explore", "🔭"),
+      ("Mensagens", "/app/messages", "💬"),
+      ("Notificações", "/app/notifications", "🔔"),
+      ("Buscar", "/app/search", "🔍"),
+      ("Meu perfil", "/app/me", "👤"),
+      ("Criar grupo", "/app/create-group", "👥"),
+      ("Criar círculo", "/app/create-circle", "🔄"),
+      ("Criar evento", "/app/create-event", "📅"),
+      ("Stories", "/app/story", "⚡"),
+      ("Configurações", "/app/settings", "⚙️")
+    ] %}
+    <nav class="side-nav">
+      {% for label, href, ico in nav %}
+        <a href="{{ href }}" class="{% if page == href %}active{% endif %}"><span class="ico">{{ ico }}</span><span class="lbl">{{ label }}</span></a>
+      {% endfor %}
+    </nav>
+    <div class="side-user">
+      {% if me.avatar %}<img class="avatar sm" src="{{ me.avatar }}" alt="">{% else %}<span class="avatar-fallback sm">{{ me.display_name[:1] }}</span>{% endif %}
+      <div class="side-user-meta">
+        <strong>{{ me.display_name }}</strong>
+        <span class="muted small">@{{ me.username }}</span>
+      </div>
+      <button class="ico-btn" data-act="logout" title="Sair">⎋</button>
+    </div>
+  </aside>
+
+  <main class="app-main">
+    {% block app %}{% endblock %}
+  </main>
+
+  <aside class="right-panel" id="right-panel">
+    {% if page == "/app" %}
+      <div class="rpanel-card">
+        <h3>Atalhos</h3>
+        <a class="btn btn-primary btn-block" href="/app/story">Criar story</a>
+        <a class="btn btn-ghost btn-block" href="/app/create-group">Novo grupo</a>
+        <a class="btn btn-ghost btn-block" href="/app/create-event">Novo evento</a>
+      </div>
+    {% else %}
+      <div class="rpanel-card">
+        <h3>NEXA</h3>
+        <p class="muted small">Mesma conta em todas as plataformas.</p>
+        <a href="/about" class="muted small">Sobre</a>
+      </div>
+    {% endif %}
+  </aside>
+
+  <nav class="bottom-nav">
+    <a href="/app" data-page="/app" class="{% if page == '/app' %}active{% endif %}">🏠<span>Início</span></a>
+    <a href="/app/messages" data-page="/app/messages" class="{% if page == '/app/messages' %}active{% endif %}">💬<span>Chat</span></a>
+    <a href="/app/notifications" data-page="/app/notifications" class="{% if page == '/app/notifications' %}active{% endif %}">🔔<span>Alertas</span></a>
+    <a href="/app/search" data-page="/app/search" class="{% if page == '/app/search' %}active{% endif %}">🔍<span>Busca</span></a>
+    <a href="/app/me" data-page="/app/me" class="{% if page == '/app/me' %}active{% endif %}">👤<span>Perfil</span></a>
+  </nav>
+</div>
+<script>
+  window.NEXA = {
+    wsUrl: "{{ ws_url | e }}",
+    token: "{{ session_token | e }}",
+    me: {{ app | tojson }}
+  };
+</script>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

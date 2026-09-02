@@ -1,0 +1,22 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page messages-page">
+  <section class="convos" id="convos">
+    <h1 class="section-title">Mensagens</h1>
+    <div id="convos-list">
+      <p class="muted" id="convos-empty">Carregando conversas...</p>
+    </div>
+  </section>
+
+  <section class="thread" id="thread">
+    <div class="thread-header" id="thread-header">
+      <span class="muted">Selecione uma conversa — o chat é enviado/recebido em tempo real.</span>
+    </div>
+    <div class="thread-messages" id="thread-messages"></div>
+    <form class="thread-composer" id="thread-form" hidden>
+      <input name="content" placeholder="Escreva sua mensagem..." autocomplete="off" maxlength="4000">
+      <button class="btn btn-primary" type="submit">Enviar</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

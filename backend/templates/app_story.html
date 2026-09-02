@@ -1,0 +1,23 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page narrow-page">
+  <h1 class="section-title">Criar story</h1>
+  <form class="card form-card" data-act="create-story">
+    <label>Texto (opcional se enviar mídia)
+      <input name="caption" maxlength="240" placeholder="Sua história...">
+    </label>
+    <span class="upload-status" data-upload-media></span>
+    <label class="btn-ghost file-btn">📷 Mídia (foto/vídeo) <input type="file" name="media" accept="image/*,video/*" hidden></label>
+    <input type="hidden" name="media_key">
+    <label>Vale por
+      <select name="hours">
+        <option value="24">24 horas</option>
+        <option value="48">48 horas</option>
+        <option value="1">1 hora</option>
+      </select>
+    </label>
+    <button class="btn btn-primary" type="submit">Publicar story</button>
+  </form>
+  <p class="form-error" data-error></p>
+</div>
+{% endblock %}

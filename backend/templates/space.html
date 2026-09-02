@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  {% if not_indexable %}<p class="notice">Este é um espaço privado. Entre para visualizar.</p>{% endif %}
+  <section class="section">
+    <div class="space-head">
+      <h1>{{ space.name }}</h1>
+      <span class="muted">{{ space.member_count }} membros</span>
+      {% if current_user %}
+        {% if space.is_member %}
+          <button class="btn btn-ghost" data-act="leave" data-space="{{ kind }}" data-slug="{{ space.slug }}">Sair</button>
+        {% else %}
+          <button class="btn btn-primary" data-act="join" data-space="{{ kind }}" data-slug="{{ space.slug }}">Entrar</button>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% if space.image %}<img class="space-image" src="{{ space.image }}" alt="" loading="lazy">{% endif %}
+    {% if space.description %}<p>{{ space.description }}</p>{% endif %}
+
+    <div class="composer" id="space-composer" data-slug="{{ space.slug }}" data-space="{{ kind }}" {% if current_user and space.is_member %}class="active"{% endif %}>
+      <form data-act="space-post">
+        <input name="title" placeholder="Título (opcional)" maxlength="160">
+        <textarea name="content" placeholder="Compartilhe algo neste espaço..." required></textarea>
+        <button class="btn btn-primary" type="submit">Publicar</button>
+      </form>
+    </div>
+
+    <h2 class="section-title">Posts públicos</h2>
+    <div class="feed">
+      {% for p in posts %}
+        {% include "_postcard.html" %}
+      {% else %}
+        <p class="empty">Nenhum post público ainda.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

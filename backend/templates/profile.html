@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  <div class="profile-hero {% if profile.cover %}has-cover{% endif %}">
+    {% if profile.cover %}<img class="cover" src="{{ profile.cover }}" alt="" loading="lazy">{% endif %}
+    <div class="profile-row">
+      <div class="avatar lg">
+        {% if profile.avatar %}<img src="{{ profile.avatar }}" alt="Foto de {{ profile.display_name }}" loading="lazy">{% else %}<span class="avatar-fallback">{{ profile.display_name[:1] }}</span>{% endif %}
+      </div>
+      <div class="profile-info">
+        <h1>{{ profile.display_name }}{% if profile.is_verified %}<span class="verified">✓</span>{% endif %}</h1>
+        <p class="muted">@{{ profile.username }} · entrou em {{ profile.created_at | pretty }}</p>
+        {% if profile.bio %}<p class="bio">{{ profile.bio }}</p>{% endif %}
+        {% if is_viewer %}
+          <a class="btn btn-ghost" href="/app/settings">Editar perfil</a>
+        {% elif current_user %}
+          <button class="btn btn-primary" data-act="follow" data-username="{{ profile.username }}">Seguir</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if not_indexable %}
+    <p class="notice">Este é um perfil privado. Entre com acesso para visualizar.</p>
+  {% endif %}
+
+  <section class="section">
+    <h2 class="section-title">Posts públicos</h2>
+    <div class="feed">
+      {% for p in posts %}
+        {% include "_postcard.html" %}
+      {% else %}
+        <p class="empty">Nenhum post público.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- fundo arredondado -->
+  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
+
+  <!-- balão principal (mensagem) -->
+  <path d="M160 88 H352 a56 56 0 0 1 56 56 v120 a56 56 0 0 1 -56 56 H232 l-96 72 16 -72 a30 30 0 0 1 -40 -28 v-148 a56 56 0 0 1 56 -56 z" fill="#fff"/>
+
+  <!-- reticências digitadas dentro do balão -->
+  <circle cx="186" cy="204" r="16" fill="url(#bg)"/>
+  <circle cx="256" cy="204" r="16" fill="url(#bg)"/>
+  <circle cx="326" cy="204" r="16" fill="url(#bg)"/>
+
+  <!-- segundo balão (eco / multiplataforma) -->
+  <path d="M96 376 h176 a36 36 0 0 1 36 36 v28 a36 36 0 0 1 -36 36 h-72 l-60 44 10 -44 a24 24 0 0 1 -54 -18 v-46 a36 36 0 0 1 36 -36 z" fill="#fff"/>
+
+  <!-- nó de rede conectando as conversas -->
+  <path d="M396 356 L440 396" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+  <circle cx="396" cy="356" r="18" fill="#fff"/>
+  <circle cx="440" cy="396" r="18" fill="#fff"/>
+</svg>

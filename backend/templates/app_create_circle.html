@@ -1,0 +1,25 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page narrow-page">
+  <h1 class="section-title">Criar círculo</h1>
+  <form class="card form-card" data-act="create-circle">
+    <label>Nome do grupo
+      <input name="name" required maxlength="120" placeholder="ex.: Fotógrafos de natureza">
+    </label>
+    <label>Descrição
+      <textarea name="description" rows="4" maxlength="5000"></textarea>
+    </label>
+    <label>Visibilidade
+      <select name="visibility">
+        <option value="public">Público (indexável)</option>
+        <option value="private">Privado</option>
+      </select>
+    </label>
+    <span class="upload-status" data-upload-image></span>
+    <label class="btn-ghost file-btn">🖼️ Imagem de capa <input type="file" name="image" accept="image/*" hidden></label>
+    <input type="hidden" name="image_key">
+    <button class="btn btn-primary" type="submit">Criar círculo</button>
+  </form>
+  <p class="form-error" data-error></p>
+</div>
+{% endblock %}

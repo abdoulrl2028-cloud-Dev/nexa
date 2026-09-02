@@ -1,0 +1,11 @@
+# Rust
+/target/
+
+# Node (se houver frontend local)
+node_modules/
+dist/
+
+# IDE
+.idea/
+.vscode/
+*.swp

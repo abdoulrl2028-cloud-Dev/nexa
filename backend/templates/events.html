@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  <section class="section">
+    <div class="section-head">
+      <h1>Eventos</h1>
+      {% if current_user %}<a class="btn btn-primary" href="/app/create-event">Criar evento</a>{% endif %}
+    </div>
+    <div class="list">
+      {% for e in events %}
+        <a class="card list-item" href="/events/{{ e.slug }}">
+          <div class="card-body">
+            <strong>{{ e.name }}</strong>
+            <span class="muted small">{{ e.begins_at | pretty }} · {{ e.location or "Online" }}</span>
+            <span class="muted small">{{ e.participant_count }} confirmados</span>
+          </div>
+        </a>
+      {% else %}
+        <p class="empty">Nenhum evento público ainda.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+{% endblock %}

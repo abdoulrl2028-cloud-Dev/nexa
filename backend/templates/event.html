@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  {% if not_indexable %}<p class="notice">Este é um evento privado. Entre para visualizar.</p>{% endif %}
+  <section class="section">
+    {% if event.image %}<img class="event-image" src="{{ event.image }}" alt="" loading="lazy">{% endif %}
+    <h1>{{ event.name }}</h1>
+    <p class="muted">{{ event.begins_at | pretty }} · {{ event.location or "Online" }} · {{ event.participant_count }} confirmados</p>
+    {% if event.description %}<p>{{ event.description }}</p>{% endif %}
+    {% if current_user %}
+      <button class="btn btn-primary" data-act="rsvp" data-slug="{{ event.slug }}" data-status="going">Eu vou</button>
+      <button class="btn btn-ghost" data-act="rsvp" data-slug="{{ event.slug }}" data-status="maybe">Talvez</button>
+    {% endif %}
+  </section>
+</main>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

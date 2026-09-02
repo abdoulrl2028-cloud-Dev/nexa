@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<header class="topbar public-nav">
+  <div class="topbar-inner">
+    <a class="brand" href="/"><span class="logo">N</span><span class="brand-name">NEXA</span></a>
+  </div>
+</header>
+<main class="auth-wrap">
+  <form class="auth-box" id="login-form" novalidate>
+    <h1>Entrar</h1>
+    <label>Usuário
+      <input name="username" required autocomplete="username" placeholder="seu_username">
+    </label>
+    <label>Senha
+      <input name="password" type="password" required autocomplete="current-password" placeholder="••••••••">
+    </label>
+    <p class="form-error" data-error></p>
+    <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+    <p class="muted center">Não tem conta? <a href="/register">Criar conta</a></p>
+  </form>
+</main>
+<script src="/static/js/app.js?{{ js_ver }}" defer></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+# Python / venv
+backend/.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Banco de dados local de desenvolvimento
+backend/nexa-dev.db
+backend/*.db
+
+# Uploads / storage local
+backend/data/
+
+# Ambiente / secrets
+.env
+.env.local
+
+# Logs e artefatos
+*.log
+.DS_Store
+Thumbs.db
+
+# Testes / cache
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Desktop (Tauri/Rust)
+desktop/src-tauri/target/
+desktop/node_modules/
+desktop/dist/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+# Terraform local
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*.backup
+terraform/crash.log

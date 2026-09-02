@@ -1,0 +1,18 @@
+<header class="topbar public-nav">
+  <div class="topbar-inner">
+    <a class="brand" href="/"><span class="logo">N</span> <span class="brand-name">NEXA</span></a>
+    <nav class="nav-links">
+      <a href="/explore">Explorar</a>
+      <a href="/people">Pessoas</a>
+      <a href="/groups">Grupos</a>
+      <a href="/circles">Círculos</a>
+      <a href="/events">Eventos</a>
+      {% if current_user %}
+        <a class="btn btn-primary" href="/app">Entrar no app</a>
+      {% else %}
+        <a class="btn btn-ghost" href="/login">Entrar</a>
+        <a class="btn btn-primary" href="/register">Criar conta</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>

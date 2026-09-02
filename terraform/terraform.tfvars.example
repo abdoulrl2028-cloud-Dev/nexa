@@ -1,0 +1,8 @@
+# Copia para terraform.tfvars e ajusta.
+region            = "us-east-1"
+# site_url e acm_certificate_arn: preencha para HTTPS com seu domínio.
+site_url           = ""
+acm_certificate_arn = ""
+route53_zone_id     = ""
+allow_registration = true
+max_upload_mb     = 25

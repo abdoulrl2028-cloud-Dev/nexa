@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "_nav.html" %}
+<main class="page">
+  <section class="hero">
+    <h1>Conecte. Compartilhe. Crie.</h1>
+    <p>NEXA é a rede social multiplataforma — no celular, tablet, desktop e navegador, com a mesma conta, os mesmos dados e a mesma segurança.</p>
+    <div class="hero-actions">
+      {% if current_user %}
+        <a class="btn btn-primary btn-lg" href="/app">Abrir NEXA</a>
+      {% else %}
+        <a class="btn btn-primary btn-lg" href="/register">Criar conta gratuita</a>
+        <a class="btn btn-ghost btn-lg" href="/explore">Explorar posts públicos</a>
+      {% endif %}
+    </div>
+    <div class="platforms">
+      <span>Android</span><span>Tablet</span><span>Windows</span><span>Linux</span><span>macOS</span><span>Web</span>
+    </div>
+  </section>
+
+  <section class="stats-row">
+    <div class="stat"><strong>{{ stats.people }}</strong><span>pessoas</span></div>
+    <div class="stat"><strong>{{ stats.groups }}</strong><span>grupos públicos</span></div>
+    <div class="stat"><strong>{{ stats.events }}</strong><span>eventos</span></div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Posts públicos recentes</h2>
+    <div class="feed">
+      {% for p in feed %}
+        {% include "_postcard.html" %}
+      {% else %}
+        <p class="empty">Nenhum post público ainda. Seja o primeiro a criar conteúdo.</p>
+      {% endfor %}
+    </div>
+  </section>
+</main>
+<footer class="footer">
+  <a href="/about">Sobre</a><a href="/docs/SEO.md">SEO</a><a href="/static/manifest.webmanifest">PWA</a>
+</footer>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "app_base.html" %}
+{% block app %}
+<div class="page narrow-page">
+  <h1 class="section-title">Configurações</h1>
+  <form class="card form-card" data-act="update-profile" id="settings-form">
+    <label>Nome público
+      <input name="display_name" value="{{ me.display_name }}" maxlength="64">
+    </label>
+    <label>Biografia pública
+      <textarea name="bio" rows="3" maxlength="500" placeholder="Conte algo sobre você">{{ me.bio }}{% if 'bio' not in me %}{% endif %}</textarea>
+    </label>
+    <label class="check">
+      <input type="checkbox" name="is_private" {% if me.is_private %}checked{% endif %}>
+      Perfil privado (não entra na indexação pública)
+    </label>
+    <div class="composer-actions">
+      <span class="upload-status" data-upload-avatar></span>
+      <label class="btn-ghost file-btn">👤 Foto <input type="file" name="avatar" accept="image/*" hidden></label>
+      <label class="btn-ghost file-btn">🖼️ Capa <input type="file" name="cover" accept="image/*" hidden></label>
+      <input type="hidden" name="avatar_key" value="{{ me.avatar }}">
+      <input type="hidden" name="cover_key">
+      <button class="btn btn-primary" type="submit">Salvar</button>
+    </div>
+  </form>
+  <p class="form-error" data-error></p>
+</div>
+{% endblock %}
