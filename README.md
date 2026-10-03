@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/abdoulrl2028-cloud-Dev/abdoulrl2028-cloud-Dev/main/assets/projects/nexa.jpg" alt="NEXA, rede social" width="100%">
+</p>
+
 # NEXA
 
 Rede social multiplataforma. Um único backend **FastAPI** serve a mesma base em
