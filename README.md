@@ -1,183 +1,132 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/abdoulrl2028-cloud-Dev/abdoulrl2028-cloud-Dev/main/assets/projects/nexa.jpg" alt="NEXA, rede social" width="100%">
+  <img src="https://raw.githubusercontent.com/abdoulrl2028-cloud-Dev/abdoulrl2028-cloud-Dev/main/assets/projects/nexa.jpg" alt="NEXA social network" width="100%">
 </p>
 
 # NEXA
 
-Rede social multiplataforma. Um único backend **FastAPI** serve a mesma base em
-quatro superfícies: **Web/PWA**, **Android (TWA)**, **Desktop (Tauri)** e
-**Tablet** — com SSR + SEO, API REST e WebSocket realtime de mensagens.
+A cross-platform social network. One **FastAPI** backend serves four surfaces: **Web/PWA**, **Android (TWA)**, **Desktop (Tauri)**, and **Tablet**, with SSR, SEO, a REST API, and realtime messages over WebSocket.
 
 ```
 Browser / PWA ──► FastAPI (REST + SSR/SEO + WS) ◄── Desktop (Tauri)
 Android TWA   ──►        │                         ▲
-                     DB (SQLite/PostgreSQL)         ┆  mesmo código
-                     Redis (opcional)               ┘
+                     DB (SQLite/PostgreSQL)         ┆  same code
+                     Redis (optional)               ┘
 ```
 
-## Sobre
+## About
 
-- **Backend**: Python 3 + FastAPI + SQLAlchemy 2.0 + Jinja2 (SSR).
-- **Frontend**: JS/CSS vanilla, PWA instalável (manifest + service worker + ícones).
-- **Auth**: PBKDF2-HMAC-SHA256, JWT HS256, cookie httpOnly + Bearer.
-- **Recursos**: posts (public/private/friends), feed com cursor, follow, grupos,
-  círculos, eventos, stories, mensagens diretas com WebSocket realtime,
-  notificações, pesquisa, uploads, admin e reports (5 → remoção).
-- **Testes**: suíte pytest (`backend/tests/`, 29 testes) rodada no CI.
+- **Backend:** Python 3, FastAPI, SQLAlchemy 2.0, and Jinja2 (SSR).
+- **Frontend:** vanilla JS/CSS, installable PWA (manifest, service worker, and icons).
+- **Auth:** PBKDF2-HMAC-SHA256, JWT HS256, httpOnly cookie, and Bearer tokens.
+- **Features:** posts (public, private, friends), cursor feed, follow, groups, circles, events, stories, direct messages with realtime WebSocket, notifications, search, uploads, admin, and reports (5 reports remove a post).
+- **Tests:** pytest suite in `backend/tests/` (29 tests) running in CI.
 
-## Estrutura
+## Layout
 
 ```
 nexa/
-├── backend/
-│   ├── app/            # FastAPI: routers/, pages/ (SSR+SEO), modelos, deps
-│   ├── templates/      # Jinja2 (público + área logada)
-│   ├── static/         # CSS, JS, sw.js, manifest, ícones
-│   ├── alembic/        # migrações de banco
-│   ├── tests/          # suíte pytest (29 testes)
-│   └── requirements.txt
-├── desktop/            # wrapper Tauri v2 (scaffold — requer Rust)
+├── backend/            # FastAPI, templates, static files, Alembic, tests
+├── desktop/            # Tauri v2 wrapper (needs Rust)
 ├── deploy/             # Dockerfile, docker-compose, Caddyfile, run.sh
-├── docs/               # 10 documentos (arquitetura, segurança, SEO, cloud…)
-├── .github/workflows/  # CI/CD (test → build → security → staging → prod)
+├── docs/               # architecture, security, SEO, cloud, and more
+├── .github/workflows/  # CI/CD
 ├── .env.example
-└── run.sh              # arranque/migração/teste
+└── run.sh
 ```
 
-## Pré-requisitos
+## Requirements
 
-- Python 3.12+ (recomendado 3.12/3.14).
-- (Opcional) Redis para cache/rate-limit; (opcional) PostgreSQL para produção.
+- Python 3.12+ (3.12 or 3.14 recommended).
+- Optional Redis for cache and rate limits. Optional PostgreSQL for production.
 
-## Início rápido
+## Quick start
 
 ```bash
 cd nexa
 python3 -m venv backend/.venv
 backend/.venv/bin/pip install -r backend/requirements.txt
-
-cp .env.example .env     # ajuste SECRET_KEY etc. se preciso
-
-./run.sh migrate         # aplica migrações Alembic
-./run.sh                 # uvicorn em http://localhost:8000  (reload)
-
-# em outro terminal:
-./run.sh test            # pytest (30 testes)
+cp .env.example .env
+./run.sh migrate
+./run.sh
 ```
 
-Abra `http://localhost:8000`: registre-se e use como app.
+`./run.sh` starts uvicorn on your computer at port 8000. That address is local only. In another terminal, run `./run.sh test`.
 
-## Uso de `run.sh`
+## `run.sh`
 
-| Comando | Efeito |
-|---|---|
-| `./run.sh` | sobe uvicorn :8000 (recarga) |
+| Command | Effect |
+| --- | --- |
+| `./run.sh` | Start uvicorn on port 8000 with reload |
 | `./run.sh migrate` | `alembic upgrade head` |
-| `./run.sh test` | roda a suíte pytest |
-| `PORT=9000 ./run.sh` | muda a porta |
+| `./run.sh test` | Run pytest |
+| `PORT=9000 ./run.sh` | Change the port |
 
-Variáveis: `NEXA_ENV`, `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY`, `STORAGE_DRIVER`
-(ver `.env.example`).
+Environment variables: `NEXA_ENV`, `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY`, `STORAGE_DRIVER` (see `.env.example`).
 
-## Cybersecurity — comandos de segurança
+## Security checks before release
 
-Escaneie o app localmente antes de publicar. Rode da raiz do projeto.
+Scan the app locally before publishing. Run these from the project root.
 
-| Ferramenta | O que detecta | Comando |
-|---|---|---|
-| **TruffleHog** | secrets em todo o histórico git (tokens, chaves) | `docker run --rm -v "$PWD:/pwd" ghcr.io/trufflesecurity/trufflehog:latest git file:///pwd --only-verified` |
-| **Gitleaks** | segredos/info expostos no repo | `docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8 detect --source=/repo --verbose` |
-| **Bandit** | vulnerabilidades estáticas em Python | `cd backend && .venv/bin/pip install bandit && .venv/bin/bandit -r app/` |
-| **pip-audit** | dependências Python com CVEs | `cd backend && .venv/bin/pip install pip-audit && .venv/bin/pip-audit -r requirements.txt` |
-| **Ruff** | lint + suspeitas (incl. import deadlock) | `cd backend && .venv/bin/pip install ruff && .venv/bin/ruff check app/` |
-| **Semgrep** | padrões de vulnerabilidade (auto) | `docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep scan --config=auto /src/backend/app` |
-| **Trivy (imagem)** | CVEs na imagem Docker | `docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --severity HIGH,CRITICAL <imagem>` |
-| **Headers HTTP** | verifica hardening em produção | `curl -sI https://SEU-DOMINIO/ \| grep -iE "x-content-type|x-frame|content-security|referrer"` |
+| Tool | What it finds | Command |
+| --- | --- | --- |
+| **TruffleHog** | Secrets in git history | `docker run --rm -v "$PWD:/pwd" ghcr.io/trufflesecurity/trufflehog:latest git file:///pwd --only-verified` |
+| **Gitleaks** | Exposed secrets | `docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8 detect --source=/repo --verbose` |
+| **Bandit** | Static issues in Python | `cd backend && .venv/bin/bandit -r app/` |
+| **pip-audit** | Python dependencies with CVEs | `cd backend && .venv/bin/pip-audit -r requirements.txt` |
+| **Ruff** | Lint | `cd backend && .venv/bin/ruff check app/` |
+| **Semgrep** | Vulnerability patterns | `docker run --rm -v "$PWD:/src" returntocorp/semgrep semgrep scan --config=auto /src/backend/app` |
+| **Trivy** | CVEs in the Docker image | `docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --severity HIGH,CRITICAL <image>` |
 
-Sequência mínima antes de cada release:
+Minimum sequence before each release:
 
 ```bash
 gitleaks detect --source=. --verbose
 bandit -r backend/app -q
 pip-audit -r backend/requirements.txt
-pytest -q        # via ./run.sh test
+./run.sh test
 ```
 
-O CI (`.github/workflows/ci.yml`) já roda **TruffleHog** em todo push. Em `docs/SECURITY.md`
-estão o modelo de ameaças, PBKDF2/JWT, visibilidade de posts, rate limit e runbooks.
+CI (`.github/workflows/ci.yml`) already runs **TruffleHog** on every push. `docs/SECURITY.md` covers the threat model, PBKDF2/JWT, post visibility, rate limits, and runbooks.
 
-## Deploy automático no Vercel
+## Automatic deploy on Vercel
 
-O `backend/` já contém integração com Vercel: `vercel.json` + `api/index.py`
-(função serverless ASGI do FastAPI). Com a raiz do deploy apontando para
-`backend`, **cada push/PR publica automaticamente** (preview + produção).
+`backend/` includes `vercel.json` and `api/index.py` (ASGI serverless function). Set the deploy root to `backend`. Each push publishes a preview or production deployment.
 
-1. **Suba o projeto ao GitHub** (ver “Publicar” abaixo).
-2. No painel da Vercel: **Add New → Project → Import** do repositório do NEXA.
-3. Em *Project Settings*: **Root Directory = `backend`**.
-4. Adicione as variáveis de ambiente (Settings → Environment Variables):
+1. Push the project to GitHub.
+2. In Vercel: **Add New → Project → Import** the NEXA repository.
+3. Set **Root Directory** to `backend`.
+4. Add environment variables: `NEXA_ENV`, `SECRET_KEY`, `DATABASE_URL`, optional `REDIS_URL`, and S3 settings if you use object storage.
+5. Deploy.
 
-   ```
-   NEXA_ENV=production
-   SECRET_KEY=<openssl rand -hex 32>
-   DATABASE_URL=postgresql+psycopg://...@...:5432/nexa   # Neon / RDS / Aiven
-   REDIS_URL=redis://...:6379/0                          # Upstash/Redis (opcional)
-   STORAGE_DRIVER=s3
-   S3_BUCKET=<bucket-s3>
-   S3_REGION=us-east-1
-   AWS_ACCESS_KEY_ID=...
-   AWS_SECRET_ACCESS_KEY=...
-   ```
-5. **Deploy**. A partir daqui, todo push na branch principal (ou PR) deploga
-   automaticamente (preview para PRs).
+The realtime WebSocket (`/api/messages/ws`) does not run on serverless functions. On Vercel, REST, SSR, and polling work. For realtime, use the **AWS Fargate** setup in `terraform/` (RDS, Redis, S3, and an ALB).
 
-> **Limitação**: o WebSocket realtime de mensagens (`/api/messages/ws`) **não**
-> roda em funções serverless. No Vercel, REST + SSR + polling funcionam; para
-> realtime use a implantação **AWS Fargate** (`terraform/`, com RDS+Redis+S3 e
-> ALB) — ambos já prontos.
+## Docs
 
-## Documentação
+| Document | Topic |
+| --- | --- |
+| `docs/ARCHITECTURE.md` | Architecture and decisions |
+| `docs/SECURITY.md` | Security and threat model |
+| `docs/SEO.md` | Indexing and SSR |
+| `docs/PWA.md` | Offline install |
+| `docs/TABLET.md` | Responsive layout |
+| `docs/GOOGLE-PLAY.md` | Play Store (TWA) |
+| `docs/DESKTOP.md` | Desktop app |
+| `docs/CLOUD.md` | Cloud provider |
+| `docs/DEPLOYMENT.md` | Deploy and CI/CD |
+| `docs/MONITORING.md` | Observability |
 
-| Documento | Área |
-|---|---|
-| `docs/ARCHITECTURE.md` | arquitetura e decisões |
-| `docs/SECURITY.md` | segurança e modelo de ameaças |
-| `docs/SEO.md` | indexação/SSR |
-| `docs/PWA.md` | instalabilidade offline |
-| `docs/TABLET.md` | responsividade |
-| `docs/GOOGLE-PLAY.md` | publicar na Play (TWA) |
-| `docs/DESKTOP.md` | aplicação desktop |
-| `docs/CLOUD.md` | nuvem/provedor |
-| `docs/DEPLOYMENT.md` | deploy + CI/CD |
-| `docs/MONITORING.md` | observabilidade |
+## Main routes
 
-## Rotas principais
+- **Public:** `/`, `/login`, `/register`, `/post/{slug}`, `/profile/{username}`, sitemaps, `robots.txt`, `manifest.json`.
+- **API** (`/api/*`): auth, users, posts, feed, search, groups, circles, events, stories, messages, notifications, uploads, and admin.
+- **Signed-in area** (`/app/*`): feed, messages, publishing, groups, events, and stories.
 
-- **Público**: `/`, `/login`, `/register`, `/post/{slug}`, `/profile/{username}`,
-  sitemaps, `robots.txt`, `manifest.json`.
-- **API** (`/api/*`): auth, users, posts, feed, search, groups, circles, events,
-  stories, messages (+ WebSocket `/api/messages/ws`), notifications, uploads,
-  admin.
-- **Área logada** (`/app/*`): feed, mensagens, publicar, grupos, eventos, stories.
+## Publish
 
-## Contribuir / validar
+1. Push the repository to GitHub.
+2. Import it in Vercel with Root Directory `backend`.
+3. For production with realtime, use `terraform/` (`terraform apply` for ECS Fargate, RDS, Redis, S3, and an ALB) and `./ecr-push.sh` for the image.
 
-- Rodar sempre `./run.sh test` antes de subir mudanças.
-- Add migração com `cd backend && .venv/bin/python -m alembic revision --autogenerate -m "..."`.
-- O CI exige testes verdes, imagem buildável e sem secrets no diff.
-- Rodar a suíte de cybersecurity (seção acima) antes de publicar.
+## License
 
-## Publicar
-
-1. **GitHub**: `git init -b main && git add -A && git commit -m "feat: NEXA v0.1"`,
-   crie o repo (por ex. via `gh repo create nexa --public --source . --push`) e
-   suba.
-2. **Vercel**: importe o repo com Root Directory = `backend` — deploys automáticos
-   em cada push (seção acima).
-3. **AWS (produção com realtime)**: `terraform/` — veja `terraform/README.md`
-   (`terraform apply` → ECS Fargate + RDS + Redis + S3 + ALB), e `./ecr-push.sh`
-   para publicar a imagem.
-
-## Licença
-
-Projeto de portfólio de aprendizado. Todos os dados são fictícios.
+Learning portfolio project. All sample data is fictional.
